@@ -16,38 +16,81 @@ joblib.dump(clf, "clf.pkl")
 # Title
 st.header("Streamlit Machine Learning App")
 
-# Input bar 1
-timer = st.number_input("Enter time",0)
-
-act_rec = st.number_input('Enter Activity recognition',0)
-
-and_sen_acc  = st.number_input("Enter android.sensor.accelerometer",0)
-
-and_sen_game_vec = st.number_input("Enter android.sensor.game_rotation_vector",0)
-
-and_sen_grav = st.number_input("Enter android.sensor.gravity",0)
-
-and_sen_gyro = st.number_input("Enter android.sensor.gyroscope",0)
-
-and_sen_gyro_unc = st.number_input("Enter android.sensor.gyroscope_uncalibrated",0)
-
-and_sen_lin_acc = st.number_input("Enter android.sensor.linear_acceleration",0)
-
-and_sen_mag_f = st.number_input("Enter android.sensor.magnetic_field",0)
-
-and_sen_mag_f_unc = st.number_input("Enter android.sensor.magnetic_field_uncalibrated",0)
-
-and_sen_ori = st.number_input("Enter android.sensor.orientation",0)
-
-and_sen_press = st.number_input("Enter android.sensor.pressure",0)
-
-and_sen_vec = st.number_input("Enter android.sensor.rotation_vector",0)
-
-and_sen_step_count = st.number_input("Enter android.sensor.step_counter",0)
 
 
-if st.button("Submit"):
+
+# if st.button("Submit"):
     
+#     # Unpickle classifier
+#     clf = joblib.load("clf.pkl")
+    
+#     # Store inputs into dataframe
+#     X = pd.DataFrame([[timer, act_rec,and_sen_acc,and_sen_game_vec,and_sen_grav,and_sen_gyro,and_sen_gyro_unc,
+#                       and_sen_lin_acc,and_sen_mag_f,and_sen_mag_f_unc,and_sen_ori,and_sen_press,and_sen_vec,and_sen_step_count]], 
+#                      columns = ['time', 'activityrecognition#1', 'android.sensor.accelerometer#mean',
+#                                 'android.sensor.game_rotation_vector#mean',
+#                                 'android.sensor.gravity#mean', 'android.sensor.gyroscope#mean',
+#                                 'android.sensor.gyroscope_uncalibrated#mean',
+#                                 'android.sensor.linear_acceleration#mean',
+#                                 'android.sensor.magnetic_field#mean',
+#                                 'android.sensor.magnetic_field_uncalibrated#mean',
+#                                 'android.sensor.orientation#mean', 'android.sensor.pressure#mean',
+#                                 'android.sensor.rotation_vector#mean',
+#                                 'android.sensor.step_counter#mean'])
+    
+#     # Get prediction
+#     prediction = clf.predict(X)[0]
+    
+#     # Output prediction
+#     if prediction == 1:
+#         st.text('Dude, you are GYM guy not Coder')
+    
+#     else:
+#         st.text('Dude,go and do some activities')
+        
+with st.form(key='my_form_to_submit'):
+    
+    
+    # Input bar 1
+    gender = st.number_input("Enter Gender",step=0)
+
+    age = st.number_input("Enter age",step=0)
+
+    weight = st.number_input("Enter weight",step=0.0)
+
+    height = st.number_input("Enter height",step=0.0)
+
+    timer = st.number_input("Enter time",step=0.0)
+
+    act_rec = st.number_input('Enter Activity recognition',step=0.0)
+
+    and_sen_acc  = st.number_input("Enter android.sensor.accelerometer",step=0.0)
+
+    and_sen_game_vec = st.number_input("Enter android.sensor.game_rotation_vector",step=0.0)
+
+    and_sen_grav = st.number_input("Enter android.sensor.gravity",step=0.0)
+
+    and_sen_gyro = st.number_input("Enter android.sensor.gyroscope",step=0.0)
+
+    and_sen_gyro_unc = st.number_input("Enter android.sensor.gyroscope_uncalibrated",step=0.0)
+
+    and_sen_lin_acc = st.number_input("Enter android.sensor.linear_acceleration",step=0.0)
+
+    and_sen_mag_f = st.number_input("Enter android.sensor.magnetic_field",step=0.0)
+
+    and_sen_mag_f_unc = st.number_input("Enter android.sensor.magnetic_field_uncalibrated",step=0.0)
+
+    and_sen_ori = st.number_input("Enter android.sensor.orientation",step=0.0)
+
+    and_sen_press = st.number_input("Enter android.sensor.pressure",step=0.0)
+
+    and_sen_vec = st.number_input("Enter android.sensor.rotation_vector",step=0.0)
+
+    and_sen_step_count = st.number_input("Enter android.sensor.step_counter",step=0.0)
+
+    submit_button = st.form_submit_button(label='Submit')
+
+if submit_button:
     # Unpickle classifier
     clf = joblib.load("clf.pkl")
     
@@ -70,6 +113,20 @@ if st.button("Submit"):
     
     # Output prediction
     if prediction == 1:
-        st.text('You are doing activities')
+        st.text('Dude, you are GYM guy not Coder')
+        st.text(f'prediction {prediction}')
+        prediction = 2.8
+        cal = age*weight*height*prediction
+        st.text(f'Calorie burned: {cal}')
+
+    
     else:
-        st.text('You are not doing activities')
+        st.text('Dude,go and do some activities') 
+        st.text(f'prediction {prediction}')
+        prediction = 1.1
+        cal = age*weight*height*prediction
+        st.text(f'Calorie burned: {cal}')
+        
+
+    
+    
