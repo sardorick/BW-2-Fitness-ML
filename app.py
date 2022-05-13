@@ -73,17 +73,7 @@ if submit_button:
     clf = joblib.load("clf.pkl")
     
     # Store inputs into dataframe
-    X = pd.DataFrame([[bytes_data]], 
-                     columns = ['time', 'activityrecognition#1', 'android.sensor.accelerometer#mean',
-                                'android.sensor.game_rotation_vector#mean',
-                                'android.sensor.gravity#mean', 'android.sensor.gyroscope#mean',
-                                'android.sensor.gyroscope_uncalibrated#mean',
-                                'android.sensor.linear_acceleration#mean',
-                                'android.sensor.magnetic_field#mean',
-                                'android.sensor.magnetic_field_uncalibrated#mean',
-                                'android.sensor.orientation#mean', 'android.sensor.pressure#mean',
-                                'android.sensor.rotation_vector#mean',
-                                'android.sensor.step_counter#mean'])
+    X = pd.DataFrame(bytes_data)
     
     # Get prediction
     prediction = clf.predict(X)[0]
