@@ -1,5 +1,5 @@
 from calendar import day_abbr
-#from curses import color_content
+from curses import color_content
 from matplotlib.pyplot import colorbar, colormaps, xlabel
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -14,7 +14,7 @@ import joblib
 st.set_page_config(page_title='Calorie Calculator ML model', layout='wide')
 
 ndf = pd.read_csv('new_data 2.csv')
-ndf[['time', 'activityrecognition#1']] = ndf[['time', 'activityrecognition#1']].astype('int')
+ndf[['time', 'activityrecognition#1', 'android.sensor.pressure#mean', 'android.sensor.step_counter#mean', 'target']] = ndf[['time', 'activityrecognition#1', 'android.sensor.pressure#mean', 'android.sensor.step_counter#mean', 'target']].astype('int')
 ndf['activityrecognition#1'] = ndf['activityrecognition#1'].astype('int')
 df = pd.read_csv('five_sec')
 df0 = pd.read_csv('half_sec')
@@ -86,7 +86,7 @@ elif menu == 'Data Analysis':
 
         elif graph_choice == 'Data Info':
             st.header('Data Information')
-            st.text(f'Before Feature Selection and Data Cleaning, Data has 62586 rows and 71 columns.\nAfter Feature selection and data cleaning data Thre are {ndf.shape[0]} rows and {ndf.shape[1]} columns in the data')
+            st.text(f'Before Feature Selection and Data Cleaning, Data has 62586 rows and 71 columns.\nAfter Feature selection and data cleaning, there are {ndf.shape[0]} rows and {ndf.shape[1]} columns in the data')
             st.write(ndf)
             st.text(f'Number of rows: {ndf.shape[0]}')
             st.text(f'Number of columns: {ndf.shape[1]}')
@@ -153,7 +153,7 @@ else:
             # st.markdown(f'prediction {prediction}')
             met = 3.0
             # Using Harris Benedict equation
-            time = timer / 60 #minutes
+            # time = timer / 60 #minutes
             cal = met * 3.5 * weight/200
             cal_h = cal * timer
             if cal_h == 0 :
@@ -171,7 +171,6 @@ else:
             # st.markdown(f'prediction {prediction}')
             met = 1.0
             # Using Harris-Benedict equation
-            time = timer / 60
             cal = met * 3.5 * weight/200
             cal_h = cal*timer
             if cal_h == 0:
