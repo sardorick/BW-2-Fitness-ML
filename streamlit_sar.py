@@ -35,39 +35,55 @@ elif menu == 'EDA':
         graph_choice = st.sidebar.selectbox('Graphs', ['Balance of users', 'Balance of targets', 'Features'])
         if graph_choice == 'Balance of targets':
             df_u1 = df[df['user'] == 'U1']
+            df2 = df[df.user != 'U1']
+            # df2 = df.dropna(how='all')
             fig = px.bar(x=df['target'].value_counts().values, y=df['target'].value_counts().index, template='ggplot2',
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets in 5-second balanced dataset', height=600, width=800)
             fig1 = px.bar(x=df_u1['target'].value_counts().values, y=df_u1['target'].value_counts().index, template='ggplot2', text_auto='.2s',
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets from only U1 data in 5-second balanced dataset', height=600, width=800)
-            st.write(fig, fig1)
+            fig2 = px.bar(x=df2['target'].value_counts().values, y=df2['target'].value_counts().index, template='ggplot2',
+                        labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets for all other users in 5-second balanced dataset', height=600, width=800)
+            st.write(fig, fig1, fig2)
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df['user'].value_counts(ascending=True).values, y=df['user'].value_counts(ascending=True).index, template='ggplot2',
                         labels = {"x":'Sample per user', 'y':'Users'}, title='Balance of samples from each user', height=600, width=800)
             st.write(fig)
         else:
             fig = px.imshow(df.isnull(), height=600, width=800, title='Missing (NaN) values in the dataset') # yticklabels=False, cbar=False,cmap='viridis'
-            fig_1 = px.scatter(df, x = df['android.sensor.step_counter#mean'], y=df['android.sensor.accelerometer#mean'], color=df['target'])
-            st.write(fig, fig_1)
+            # fig_1 = px.scatter(df, x = df['android.sensor.step_counter#mean'], y=df['android.sensor.accelerometer#mean'], color=df['target'])
+            image_2 = Image.open('accelerator_gravity.png')
+            st.write(fig)
+            st.image(image_2)
     else:
         graph_choice = st.sidebar.selectbox('Graphs', ['Balance of users', 'Balance of targets', 'Features'])
         if graph_choice == 'Balance of targets':
             df_u1 = df0[df0['user'] == 'U1']
+            df3 = df0[df0.user != 'U1']
             fig = px.bar(x=df0['target'].value_counts().values, y=df0['target'].value_counts().index, template='ggplot2',
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets in 0.5-second balanced dataset', height=600, width=800)
             fig1 = px.bar(x=df_u1['target'].value_counts().values, y=df_u1['target'].value_counts().index, template='ggplot2', text_auto='.2s',
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets from only U1 data in 0.5-second balanced dataset', height=600, width=800)
-            st.write(fig, fig1)
+            fig2 = px.bar(x=df3['target'].value_counts().values, y=df3['target'].value_counts().index, template='ggplot2',
+                        labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets for all other users in 5-second balanced dataset', height=600, width=800)
+
+            st.write(fig, fig1, fig2)
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df0['user'].value_counts(ascending=True).values, y=df0['user'].value_counts(ascending=True).index, template='ggplot2',
                         labels = {"x":'Sample per user', 'y':'Users'}, title='Balance of samples from each user', height=600, width=800)
             st.write(fig)
         else:
             fig = px.imshow(df0.isnull(), height=600, width=800, title='Missing (NaN) values in the dataset') # yticklabels=False, cbar=False,cmap='viridis'
-            fig_1 = px.scatter(df0, x = df0['android.sensor.step_counter#mean'], y=df0['android.sensor.accelerometer#mean'], color=df0['target'])
-            st.write(fig, fig_1)
+            # fig_1 = px.scatter(df0, x = df0['android.sensor.step_counter#mean'], y=df0['android.sensor.accelerometer#mean'], color=df0['target'])
+            st.write(fig)
 else:
-    uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files = True)
-    for uploaded_file in uploaded_files:
-        data = pd.read_csv(uploaded_file)
-        st.write("filename:", uploaded_file.name)
+    st.title("Calory calculator")
+    st.markdown("Please upload a file with data")
+    uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files = True, type=['csv', 'xlsx'])
+    file = uploaded_files[0]
+    if file is not None:
+
+        data = pd.read_excel(file)
         st.write(data)
+    else:
+        st.warning("Please upload a valid file")
+    st.markdown("Please insert the following information: ")
