@@ -18,35 +18,6 @@ st.header("Streamlit Machine Learning App")
 
 
 
-
-# if st.button("Submit"):
-    
-#     # Unpickle classifier
-#     clf = joblib.load("clf.pkl")
-    
-#     # Store inputs into dataframe
-#     X = pd.DataFrame([[timer, act_rec,and_sen_acc,and_sen_game_vec,and_sen_grav,and_sen_gyro,and_sen_gyro_unc,
-#                       and_sen_lin_acc,and_sen_mag_f,and_sen_mag_f_unc,and_sen_ori,and_sen_press,and_sen_vec,and_sen_step_count]], 
-#                      columns = ['time', 'activityrecognition#1', 'android.sensor.accelerometer#mean',
-#                                 'android.sensor.game_rotation_vector#mean',
-#                                 'android.sensor.gravity#mean', 'android.sensor.gyroscope#mean',
-#                                 'android.sensor.gyroscope_uncalibrated#mean',
-#                                 'android.sensor.linear_acceleration#mean',
-#                                 'android.sensor.magnetic_field#mean',
-#                                 'android.sensor.magnetic_field_uncalibrated#mean',
-#                                 'android.sensor.orientation#mean', 'android.sensor.pressure#mean',
-#                                 'android.sensor.rotation_vector#mean',
-#                                 'android.sensor.step_counter#mean'])
-    
-#     # Get prediction
-#     prediction = clf.predict(X)[0]
-    
-#     # Output prediction
-#     if prediction == 1:
-#         st.text('Dude, you are GYM guy not Coder')
-    
-#     else:
-#         st.text('Dude,go and do some activities')
         
 with st.form(key='my_form_to_submit'):
     
@@ -88,25 +59,22 @@ with st.form(key='my_form_to_submit'):
 
     and_sen_step_count = st.number_input("Enter android.sensor.step_counter",step=0.0)
 
+    uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files=True)
+    for uploaded_file in uploaded_files:
+        bytes_data = uploaded_file.read()
+
+
     submit_button = st.form_submit_button(label='Submit')
+
+
 
 if submit_button:
     # Unpickle classifier
     clf = joblib.load("clf.pkl")
     
     # Store inputs into dataframe
-    X = pd.DataFrame([[timer, act_rec,and_sen_acc,and_sen_game_vec,and_sen_grav,and_sen_gyro,and_sen_gyro_unc,
-                      and_sen_lin_acc,and_sen_mag_f,and_sen_mag_f_unc,and_sen_ori,and_sen_press,and_sen_vec,and_sen_step_count]], 
-                     columns = ['time', 'activityrecognition#1', 'android.sensor.accelerometer#mean',
-                                'android.sensor.game_rotation_vector#mean',
-                                'android.sensor.gravity#mean', 'android.sensor.gyroscope#mean',
-                                'android.sensor.gyroscope_uncalibrated#mean',
-                                'android.sensor.linear_acceleration#mean',
-                                'android.sensor.magnetic_field#mean',
-                                'android.sensor.magnetic_field_uncalibrated#mean',
-                                'android.sensor.orientation#mean', 'android.sensor.pressure#mean',
-                                'android.sensor.rotation_vector#mean',
-                                'android.sensor.step_counter#mean'])
+    X = pd.DataFrame(bytes_data)
+    X = X.astype(float)
     
     # Get prediction
     prediction = clf.predict(X)[0]
@@ -115,18 +83,19 @@ if submit_button:
     if prediction == 1:
         st.text('Dude, you are GYM guy not Coder')
         st.text(f'prediction {prediction}')
-        prediction = 2.8
-        cal = age*weight*height*prediction
+        met = 2.8
+        cal = age*weight*height*met
         st.text(f'Calorie burned: {cal}')
 
     
     else:
         st.text('Dude,go and do some activities') 
         st.text(f'prediction {prediction}')
-        prediction = 1.1
-        cal = age*weight*height*prediction
+        met = 1.1
+        cal = age*weight*height*met
         st.text(f'Calorie burned: {cal}')
         
 
     
     
+#timer, act_rec,and_sen_acc,and_sen_game_vec,and_sen_grav,and_sen_gyro,and_sen_gyro_unc,and_sen_lin_acc,and_sen_mag_f,and_sen_mag_f_unc,and_sen_ori,and_sen_press,and_sen_vec,and_sen_step_count
