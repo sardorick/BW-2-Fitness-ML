@@ -14,6 +14,8 @@ import joblib
 st.set_page_config(page_title='Calorie Calculator ML model', layout='wide')
 
 ndf = pd.read_csv('new_data 2.csv')
+ndf[['time', 'activityrecognition#1']] = ndf[['time', 'activityrecognition#1']].astype('int')
+ndf['activityrecognition#1'] = ndf['activityrecognition#1'].astype('int')
 df = pd.read_csv('five_sec')
 df0 = pd.read_csv('half_sec')
 # Menu
@@ -128,7 +130,7 @@ else:
         for uploaded_file in uploaded_files:
             bytes_data = pd.read_csv(uploaded_file)
 
-        submit_button = st.form_submit_button(label='Submit')
+        submit_button = st.form_submit_button(label='Calculate')
 
 
 
