@@ -1,5 +1,5 @@
 from calendar import day_abbr
-from curses import color_content
+#from curses import color_content
 from matplotlib.pyplot import colorbar, colormaps, xlabel
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -11,17 +11,18 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from sklearn.ensemble import RandomForestClassifier
 import joblib
-st.set_page_config(page_title='Calory calculator ML model', layout='wide')
+st.set_page_config(page_title='Calorie Calculator ML model', layout='wide')
 
+ndf = pd.read_csv('new_data 2.csv')
 df = pd.read_csv('five_sec')
 df0 = pd.read_csv('half_sec')
 # Menu
 with st.sidebar:
-    menu = option_menu(menu_title='Contents', menu_icon = 'menu-up', options=['Home', 'EDA', 'Calory calculator'],
+    menu = option_menu(menu_title='Contents', menu_icon = 'menu-up', options=['Home', 'Data Analysis', 'Calorie Calculator'],
     icons = ['house', 'clipboard-data', 'activity'], orientation='vertical')
 
 if menu == 'Home':    
-    st.title("Creating a Machine learning model based calory calculator")
+    st.title("Creating a Machine learning model based Calorie Calculator")
 
     st.markdown("Created by: _Abubakr Mamajonov, Sardorbek Zokirov_")
     image_1 = Image.open("artur-luczka-N1zRvlXf-IM-unsplash.jpg")
@@ -34,7 +35,7 @@ if menu == 'Home':
 elif menu == 'EDA':
     data_choice = st.sidebar.selectbox('Datasets', ['Five second balanced dataset', 'Half second balanced dataset'])
     if data_choice == 'Five second balanced dataset':
-        graph_choice = st.sidebar.selectbox('Graphs', ['Balance of users', 'Balance of targets', 'Features'])
+        graph_choice = st.sidebar.selectbox('Data Info and Graphs', ['Data Info','Balance of users', 'Balance of targets', 'Features'])
         if graph_choice == 'Balance of targets':
             df_u1 = df[df['user'] == 'U1']
             df2 = df[df.user != 'U1']
@@ -46,6 +47,15 @@ elif menu == 'EDA':
             fig2 = px.bar(x=df2['target'].value_counts().values, y=df2['target'].value_counts().index, template='ggplot2',
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets for all other users in 5-second balanced dataset', height=600, width=800)
             st.write(fig, fig1, fig2)
+
+        elif graph_choice == 'Data Info':
+            st.header('Data Information')
+            st.text('Before feature selection and data cleaning data has n rows and m columns.\nAfter Feature selection and data cleaning data Thre are n rows and m columns in the data')
+            st.write(ndf)
+            st.text('Number of rows: ')
+            st.text('Number of columns: ')
+            #st.text('Target Information: 0 for doing activity and 1 for not doing activity')
+
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df['user'].value_counts(ascending=True).values, y=df['user'].value_counts(ascending=True).index, template='ggplot2',
                         labels = {"x":'Sample per user', 'y':'Users'}, title='Balance of samples from each user', height=600, width=800)
@@ -59,7 +69,7 @@ elif menu == 'EDA':
             # fig_1 = px.scatter(df, x = df['android.sensor.step_counter#mean'], y=df['android.sensor.accelerometer#mean'], color=df['target'])
             st.write(fig)
     else:
-        graph_choice = st.sidebar.selectbox('Graphs', ['Balance of users', 'Balance of targets', 'Features'])
+        graph_choice = st.sidebar.selectbox('Data Info and Graphs', ['Data Info','Balance of users', 'Balance of targets', 'Features'])
         if graph_choice == 'Balance of targets':
             df_u1 = df0[df0['user'] == 'U1']
             df3 = df0[df0.user != 'U1']
@@ -71,6 +81,15 @@ elif menu == 'EDA':
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets for all other users in 0.5-second balanced dataset', height=600, width=800)
 
             st.write(fig, fig1, fig2)
+
+        elif graph_choice == 'Data Info':
+            st.header('Data Information')
+            st.text(f'Before feature selection and data cleaning data has 62586 rows and 71 columns.\nAfter Feature selection and data cleaning data Thre are {ndf.shape[0]} rows and {ndf.shape[1]} columns in the data')
+            st.write(ndf)
+            st.text(f'Number of rows: {ndf.shape[0]}')
+            st.text(f'Number of columns: {ndf.shape[1]}')
+            st.text('Target Information: 0 for doing activity and 1 for not doing activity')
+
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df0['user'].value_counts(ascending=True).values, y=df0['user'].value_counts(ascending=True).index, template='ggplot2',
                         labels = {"x":'Sample per user', 'y':'Users'}, title='Balance of samples from each user', height=600, width=800)
@@ -91,7 +110,7 @@ else:
     clf.fit(X, y)
 
     joblib.dump(clf, "clf.pkl")
-    st.title("Calory calculator")
+    st.title("Calorie Calculator")
 
     st.markdown("Please insert the following information: ")
     with st.form(key='my_form_to_submit'):
@@ -135,8 +154,13 @@ else:
             time = timer / 60 #minutes
             cal = met * 3.5 * weight/200
             cal_h = cal * timer
-            st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
-            st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
+            if cal_h == 0 :
+                st.markdown('You are not doing activity or you entered wrong information')
+                st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
+                
+            else:
+                st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
+                st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
 
         
         else:
@@ -147,8 +171,12 @@ else:
             time = timer / 60
             cal = met * 3.5 * weight/200
             cal_h = cal*timer
-            st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
-            st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
+            if cal_h == 0:
+                st.markdown('You are not doing activity or you entered wrong information')
+                st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
+            else:
+                st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
+                st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
     
 
         
