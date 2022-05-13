@@ -32,7 +32,7 @@ if menu == 'Home':
     st.markdown("The data we have used to train and test our model is collected by the University of Bologna: _Carpineti C., Lomonaco V., Bedogni L., Di Felice M., Bononi L., 'Custom Dual Transportation Mode Detection by Smartphone Devices Exploiting Sensor Diversity', in Proceedings of the 14th Workshop on Context and Activity Modeling and Recognition (IEEE COMOREA 2018), Athens, Greece, March 19-23, 2018 [Pre-print available]_")
     st.markdown("This application contains some Exploratory Data Analysis we have performed on the data we have and a calculator that can predict the amount of burnt calories in a given amount of time.")
 
-elif menu == 'EDA':
+elif menu == 'Data Analysis':
     data_choice = st.sidebar.selectbox('Datasets', ['Five second balanced dataset', 'Half second balanced dataset'])
     if data_choice == 'Five second balanced dataset':
         graph_choice = st.sidebar.selectbox('Data Info and Graphs', ['Data Info','Balance of users', 'Balance of targets', 'Features'])
@@ -84,11 +84,11 @@ elif menu == 'EDA':
 
         elif graph_choice == 'Data Info':
             st.header('Data Information')
-            st.text(f'Before feature selection and data cleaning data has 62586 rows and 71 columns.\nAfter Feature selection and data cleaning data Thre are {ndf.shape[0]} rows and {ndf.shape[1]} columns in the data')
+            st.text(f'Before Feature Selection and Data Cleaning, Data has 62586 rows and 71 columns.\nAfter Feature selection and data cleaning data Thre are {ndf.shape[0]} rows and {ndf.shape[1]} columns in the data')
             st.write(ndf)
             st.text(f'Number of rows: {ndf.shape[0]}')
             st.text(f'Number of columns: {ndf.shape[1]}')
-            st.text('Target Information: 0 for doing activity and 1 for not doing activity')
+            st.text('Target Information: 1 for doing activity and 0 for not doing activity')
 
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df0['user'].value_counts(ascending=True).values, y=df0['user'].value_counts(ascending=True).index, template='ggplot2',
@@ -147,7 +147,7 @@ else:
         
         # Output prediction
         if prediction == 1:
-            st.markdown('Moderate physical activity')
+            
             # st.markdown(f'prediction {prediction}')
             met = 3.0
             # Using Harris Benedict equation
@@ -155,16 +155,17 @@ else:
             cal = met * 3.5 * weight/200
             cal_h = cal * timer
             if cal_h == 0 :
-                st.markdown('You are not doing activity or you entered wrong information')
+                st.markdown('Wrong information entered, please check it one more')
                 st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
                 
             else:
+                st.markdown('Moderate physical activity')
                 st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
                 st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
 
         
         else:
-            st.markdown('Light intensity activity, e.g. being in a car, standing still, etc.') 
+            
             # st.markdown(f'prediction {prediction}')
             met = 1.0
             # Using Harris-Benedict equation
@@ -172,9 +173,10 @@ else:
             cal = met * 3.5 * weight/200
             cal_h = cal*timer
             if cal_h == 0:
-                st.markdown('You are not doing activity or you entered wrong information')
+                st.markdown('Wrong information entered, please check it once more')
                 st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
             else:
+                st.markdown('Light intensity activity, e.g. being in a car, standing still, etc.') 
                 st.markdown(f'Calories burned in {int(timer)} minutes is: {cal_h}')
                 st.markdown("MET is calculated from the following source: https://www.omicsonline.org/articles-images/2157-7595-6-220-t003.html")
     
