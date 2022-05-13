@@ -35,7 +35,7 @@ if menu == 'Home':
 elif menu == 'Data Analysis':
     data_choice = st.sidebar.selectbox('Datasets', ['Five second balanced dataset', 'Half second balanced dataset'])
     if data_choice == 'Five second balanced dataset':
-        graph_choice = st.sidebar.selectbox('Data Info and Graphs', ['Data Info','Balance of users', 'Balance of targets', 'Features'])
+        graph_choice = st.sidebar.selectbox('Graphs', ['Balance of users', 'Balance of targets', 'Features'])
         if graph_choice == 'Balance of targets':
             df_u1 = df[df['user'] == 'U1']
             df2 = df[df.user != 'U1']
@@ -48,13 +48,13 @@ elif menu == 'Data Analysis':
                         labels = {"x":'Number of samples', 'y':'Mode of transportation'}, title='Balance of targets for all other users in 5-second balanced dataset', height=600, width=800)
             st.write(fig, fig1, fig2)
 
-        elif graph_choice == 'Data Info':
-            st.header('Data Information')
-            st.text('Before feature selection and data cleaning data has n rows and m columns.\nAfter Feature selection and data cleaning data Thre are n rows and m columns in the data')
-            st.write(ndf)
-            st.text('Number of rows: ')
-            st.text('Number of columns: ')
-            #st.text('Target Information: 0 for doing activity and 1 for not doing activity')
+        # elif graph_choice == 'Data Info':
+        #     st.header('Data Information')
+        #     st.text('Before feature selection and data cleaning data has n rows and m columns.\nAfter Feature selection and data cleaning data Thre are n rows and m columns in the data')
+        #     st.write(ndf)
+        #     st.text('Number of rows: ')
+        #     st.text('Number of columns: ')
+        #     #st.text('Target Information: 0 for doing activity and 1 for not doing activity')
 
         elif graph_choice == 'Balance of users':
             fig = px.bar(x=df['user'].value_counts(ascending=True).values, y=df['user'].value_counts(ascending=True).index, template='ggplot2',
